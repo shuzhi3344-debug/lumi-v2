@@ -1,12 +1,14 @@
 # Lumi v2：效果闭环
 
+**在线体验原型：https://shuzhi3344-debug.github.io/lumi-v2/prototype/**（浏览器直接打开，无需安装；顶部可切换「Pro 商家」「Free 商家」两个场景）
+
 本仓库是 Part B 实践部分的交付。v2 只做一件事：让商家看到**每条帖子带来了多少订单**，并据此生成下一条。依据是题面数据：22% 的付费用户反馈“不知道发了有没有带来订单”，全渠道付费 30 日留存只有 26%。
 
 ## 目录
 
 | 路径 | 内容 | 怎么看 |
 |---|---|---|
-| `prototype/index.html` | HTML 可点击原型（基础交付） | 浏览器直接打开，顶部可切换「Pro 商家」「Free 商家」两个场景 |
+| `prototype/index.html` | HTML 可点击原型（基础交付） | [在线打开](https://shuzhi3344-debug.github.io/lumi-v2/prototype/)，或下载后用浏览器直接打开 |
 | `docs/PRD.md` | 产品文档，按题目要求的 8 项组织 | 直接阅读 |
 | `app/` | 可运行版本（加分项） | 见下方“运行可运行版本” |
 
