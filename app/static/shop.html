@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>商品页（模拟 Shopify）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div style="max-width:520px;margin:40px auto;padding:0 16px">
+  <p class="muted" style="font-size:12px">这是模拟的 Shopify 商品页，代表商家店铺。顾客从帖子短链跳转到这里。</p>
+  <div class="card">
+    <div class="post-img" id="pname" style="border-radius:10px">…</div>
+    <p id="pdesc" class="muted" style="margin:12px 0 4px"></p>
+    <div style="font-size:24px;font-weight:700" id="pprice"></div>
+    <label class="muted" style="display:block;font-size:12px;margin-top:14px" for="code">优惠码（选填，帖子里写的那个）</label>
+    <div class="field" style="margin-top:4px">
+      <input id="code" placeholder="例如 MIAS15-101">
+      <button class="btn primary" id="buyBtn">模拟下单</button>
+    </div>
+    <div id="result"></div>
+    <p class="hint" id="landing"></p>
+  </div>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pid = location.pathname.split('/').pop();
+const q = new URLSearchParams(location.search);
+const shop = q.get('shop');
+// 模拟 Shopify 的 landing_site：记下顾客第一次进店时的网址（含 UTM）
+const key = 'landing_' + shop;
+if (q.get('utm_campaign')) { try { sessionStorage.setItem(key, location.pathname + location.search); } catch (e) {} }
+let landing = null; try { landing = sessionStorage.getItem(key); } catch (e) {}
+$('#landing').textContent = 'landing_site：' + (landing || '（无，直接访问）');
+let product;
+fetch('/api/products/' + pid).then(r => r.json()).then(p => {
+  product = p; $('#pname').textContent = p.name; $('#pdesc').textContent = p.description; $('#pprice').textContent = '$' + p.price;
+});
+$('#buyBtn').onclick = async () => {
+  if (!shop) { $('#result').innerHTML = '<p class="hint">缺少店铺参数，请从帖子短链进入。</p>'; return; }
+  const code = $('#code').value.trim();
+  // 模拟 Shopify 向 Lumi 发送订单 webhook
+  const res = await fetch('/webhooks/shopify/orders', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'X-Shopify-Shop-Domain': shop},
+    body: JSON.stringify({id: 'ord_' + Date.now(), total_price: product.price, currency: 'USD', product_id: pid,
+                          landing_site: landing, discount_codes: code ? [code] : []})
+  });
+  const d = await res.json();
+  $('#result').innerHTML = d.post_id
+    ? `<div class="track">下单成功 $${d.revenue}，已归因到帖子 <code>${esc(d.post_id)}</code>（匹配方式：${d.match_method === 'code' ? '优惠码' : '短链 UTM'}）。<br><a href="/#/results">回到 Lumi 查看效果 →</a></div>`
+    : `<div class="track locked">下单成功 $${d.revenue ?? ''}，但没有匹配到任何帖子（未带 UTM 或优惠码，或超出 7 天归因窗口）。</div>`;
+};
+</script>
+</body>
+</html>

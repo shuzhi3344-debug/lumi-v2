@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- 注册（落地页） -->
+<div class="auth hidden" id="authView">
+  <div class="logo"><i></i>Lumi</div>
+  <div class="card">
+    <div class="eyebrow">AI Marketing Assistant</div>
+    <h2 style="margin:8px 0 6px">写帖子，也看得见订单</h2>
+    <p class="muted" style="margin:0">Lumi 帮你写社媒帖子，并告诉你每条帖子带来了多少订单。</p>
+    <form id="signupForm">
+      <label for="email">邮箱</label>
+      <input id="email" type="email" required value="mia@example.com">
+      <label for="storeName">店铺名称</label>
+      <input id="storeName" required value="Mia's Skincare">
+      <button class="btn primary" style="width:100%;margin-top:16px" type="submit">免费注册</button>
+    </form>
+    <div class="attr-note hidden" id="attrNote"></div>
+  </div>
+</div>
+
+<div class="app hidden" id="appView">
+  <aside class="side">
+    <div class="logo"><i></i>Lumi</div>
+    <nav class="nav">
+      <a href="#/connect" data-nav="connect"><svg class="icon" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg>店铺连接</a>
+      <a href="#/create" data-nav="create"><svg class="icon" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>内容创作</a>
+      <a href="#/results" data-nav="results"><svg class="icon" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>效果分析</a>
+      <a href="#/pricing" data-nav="pricing"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>套餐与账单</a>
+      <div class="sep">Developer</div>
+      <a href="/events" target="_blank"><svg class="icon" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>埋点记录</a>
+    </nav>
+    <div class="store" id="storeInfo"></div>
+  </aside>
+
+  <div class="main">
+    <div class="top">
+      <h1 id="title">内容创作</h1>
+      <div class="top-actions">
+        <div class="quota">
+          <span class="badge" id="planBadge">Free</span>
+          <span id="quotaText"></span>
+          <div class="meter"><span id="quotaBar"></span></div>
+        </div>
+        <button class="btn sm" id="logoutBtn">退出</button>
+      </div>
+    </div>
+
+    <section class="view" data-view="connect">
+      <div class="connect">
+        <div class="card">
+          <div class="eyebrow">Step 1</div>
+          <h2 style="margin-top:6px">连接你的 Shopify 店铺</h2>
+          <p class="muted">接入后，Lumi 会给每条帖子挂上追踪短链和专属优惠码，并把订单对应回具体帖子。演示环境为模拟授权，会导入 4 个商品和近 30 天的 5 条历史帖子。</p>
+          <form class="field" id="connectForm">
+            <input id="storeInput" value="mias-skincare.myshopify.com" aria-label="店铺地址">
+            <button class="btn primary" type="submit">连接 Shopify</button>
+          </form>
+          <div id="connectResult"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="create">
+      <div class="chat">
+        <div class="card chat-box">
+          <div class="msgs" id="msgs"></div>
+          <div class="chips" id="chips">
+            <button class="chip">给防晒霜写一条 IG 帖子</button>
+            <button class="chip">上个月哪条帖子卖得最好？</button>
+            <button class="chip">下一条该发什么？</button>
+          </div>
+          <form class="composer" id="composer">
+            <input id="chatInput" placeholder="告诉 Lumi 想推什么商品、发在哪个平台…" autocomplete="off">
+            <button class="btn primary" type="submit" id="sendBtn">发送</button>
+          </form>
+        </div>
+        <div class="aside">
+          <div class="card">
+            <h3>店铺商品</h3>
+            <div id="productList"></div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <h3>工作方式</h3>
+            <p class="muted" style="margin:0;font-size:13px">模型根据你的话自己决定调用哪些工具（查商品、分析评价、查效果、生成帖子、建追踪链接），每一步都会显示在对话里。</p>
+            <button class="btn sm" id="resetBtn" style="margin-top:10px">清空对话</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="results"><div class="locked-wrap" id="resultsWrap"></div></section>
+
+    <section class="view" data-view="pricing">
+      <div class="card">
+        <div class="eyebrow">Pricing</div>
+        <h2 style="margin:6px 0 0">选择套餐</h2>
+        <p class="muted" style="margin:4px 0 0">按“看得见的效果”付费，而不是按生成次数。演示环境为模拟支付，不会扣款。</p>
+        <div id="pricingPlans"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

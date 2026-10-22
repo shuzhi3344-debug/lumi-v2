@@ -1,0 +1,34 @@
+[
+  {
+    "id": "p1",
+    "name": "Daily Glow 防晒霜 SPF50",
+    "price": 28,
+    "category": "防晒",
+    "description": "清爽质地，SPF50 PA++++，不泛白，适合通勤和敏感肌，30ml 便携装。",
+    "keywords": ["防晒", "防晒霜", "sunscreen", "spf"]
+  },
+  {
+    "id": "p2",
+    "name": "维 C 焕亮精华 30ml",
+    "price": 34,
+    "category": "精华",
+    "description": "15% 维 C 衍生物，提亮暗沉，温和不刺激，早晚可用。",
+    "keywords": ["维c", "精华", "serum", "vitamin c", "提亮"]
+  },
+  {
+    "id": "p3",
+    "name": "深层补水面膜 5 片装",
+    "price": 22,
+    "category": "面膜",
+    "description": "玻尿酸 + 积雪草，敷完不黏腻，熬夜后急救补水。",
+    "keywords": ["面膜", "mask", "补水"]
+  },
+  {
+    "id": "p4",
+    "name": "氨基酸洁面乳 120ml",
+    "price": 18,
+    "category": "洁面",
+    "description": "弱酸性氨基酸配方，洗后不紧绷，敏感肌可用。",
+    "keywords": ["洁面", "洗面奶", "cleanser"]
+  }
+]

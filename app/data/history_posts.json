@@ -1,0 +1,7 @@
+[
+  {"title": "夏日通勤防晒｜UGC 实拍", "product_id": "p1", "platform": "instagram", "style": "ugc", "days_ago": 19, "clicks": 593, "orders": 9, "gmv": 412, "match": "utm"},
+  {"title": "维 C 精华 7 天对比", "product_id": "p2", "platform": "instagram", "style": "ugc", "days_ago": 16, "clicks": 488, "orders": 6, "gmv": 318, "match": "code"},
+  {"title": "周末限时 85 折", "product_id": "p1", "platform": "instagram", "style": "promo", "days_ago": 12, "clicks": 420, "orders": 5, "gmv": 236, "match": "code"},
+  {"title": "成分党科普：SPF 怎么看", "product_id": "p1", "platform": "tiktok", "style": "educational", "days_ago": 9, "clicks": 236, "orders": 2, "gmv": 112, "match": "utm"},
+  {"title": "面膜开箱", "product_id": "p3", "platform": "instagram", "style": "unboxing", "days_ago": 6, "clicks": 125, "orders": 1, "gmv": 62, "match": "utm"}
+]

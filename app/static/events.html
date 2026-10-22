@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumi 埋点记录</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="view" style="max-width:1100px;margin:0 auto">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <div>
+      <div class="eyebrow">Developer</div><h1 style="margin:4px 0 0;font:700 22px/1.3 var(--head)">埋点记录</h1>
+      <p class="muted" style="margin:4px 0 0">数据库 events 表的实时内容。服务端事件由后端写入，前端事件经 /api/events 上报。每 3 秒刷新。</p>
+    </div>
+    <label style="font-size:13px"><input type="checkbox" id="all"> 显示所有用户</label>
+  </div>
+  <div class="card" style="margin-top:16px;padding:8px 16px">
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>时间（UTC）</th><th>事件名</th><th>上报端</th><th>用户</th><th>属性</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </div>
+</div>
+<script>
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function load() {
+  const all = document.getElementById('all').checked;
+  const rows = await fetch('/api/events?scope=' + (all ? 'all' : 'me')).then(r => r.json());
+  document.getElementById('rows').innerHTML = rows.map(e => `<tr>
+    <td style="white-space:nowrap;font-size:12px">${esc(e.ts.slice(5, 19).replace('T', ' '))}</td>
+    <td><code>${esc(e.name)}</code></td>
+    <td><span class="pill ${e.side === 'server' ? 'good' : ''}">${e.side === 'server' ? '服务端' : '前端'}</span></td>
+    <td style="font-size:12px">${esc(e.user_id || '—')}</td>
+    <td style="font-size:12px;word-break:break-all;font-family:ui-monospace,Menlo,monospace">${esc(JSON.stringify(e.props))}</td></tr>`).join('')
+    || '<tr><td colspan="5" class="muted">还没有事件</td></tr>';
+}
+document.getElementById('all').onchange = load;
+load(); setInterval(load, 3000);
+</script>
+</body>
+</html>
